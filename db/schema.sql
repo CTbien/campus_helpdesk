@@ -1,0 +1,45 @@
+-- db/schema.sql
+DROP DATABASE IF EXISTS campus_helpdesk;
+CREATE DATABASE campus_helpdesk CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE campus_helpdesk;
+
+CREATE TABLE utilisateurs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  mdp_hash VARCHAR(255) NOT NULL,
+  role ENUM('ETUDIANT','TECH','ADMIN') NOT NULL DEFAULT 'ETUDIANT',
+  actif TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  libelle VARCHAR(80) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE tickets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  titre VARCHAR(120) NOT NULL,
+  description TEXT NOT NULL,
+  priorite ENUM('BASSE','MOYENNE','HAUTE') NOT NULL DEFAULT 'MOYENNE',
+  statut ENUM('OPEN','IN_PROGRESS','RESOLVED','CLOSED') NOT NULL DEFAULT 'OPEN',
+  categorie_id INT NOT NULL,
+  cree_par INT NOT NULL,
+  assigne_a INT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_tickets_categorie FOREIGN KEY (categorie_id) REFERENCES categories(id),
+  CONSTRAINT fk_tickets_createur FOREIGN KEY (cree_par) REFERENCES utilisateurs(id),
+  CONSTRAINT fk_tickets_assigne FOREIGN KEY (assigne_a) REFERENCES utilisateurs(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE messages_ticket (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ticket_id INT NOT NULL,
+  user_id INT NOT NULL,
+  message TEXT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_msg_ticket FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
+  CONSTRAINT fk_msg_user FOREIGN KEY (user_id) REFERENCES utilisateurs(id)
+) ENGINE=InnoDB;
