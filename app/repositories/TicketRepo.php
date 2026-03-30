@@ -116,4 +116,42 @@ final class TicketRepo {
         $stmt->execute(['ticket_id' => $ticketId]);
         return $stmt->fetchAll();
     }
+
+    public function getStatistics(): array {
+        $stats = [
+            'total' => 0,
+            'by_status' => [],
+            'by_priority' => [],
+            'by_category' => []
+        ];
+
+        // Total
+        $stmt = db()->query("SELECT COUNT(*) as cnt FROM tickets");
+        $stats['total'] = (int)$stmt->fetch()['cnt'];
+
+        // By Status
+        $stmt = db()->query("SELECT statut, COUNT(*) as cnt FROM tickets GROUP BY statut");
+        foreach ($stmt->fetchAll() as $row) {
+            $stats['by_status'][$row['statut']] = (int)$row['cnt'];
+        }
+
+        // By Priority
+        $stmt = db()->query("SELECT priorite, COUNT(*) as cnt FROM tickets GROUP BY priorite");
+        foreach ($stmt->fetchAll() as $row) {
+            $stats['by_priority'][$row['priorite']] = (int)$row['cnt'];
+        }
+
+        // By Category
+        $stmt = db()->query(
+            "SELECT c.libelle, COUNT(t.id) as cnt 
+             FROM categories c 
+             LEFT JOIN tickets t ON c.id = t.categorie_id 
+             GROUP BY c.id, c.libelle"
+        );
+        foreach ($stmt->fetchAll() as $row) {
+            $stats['by_category'][$row['libelle']] = (int)$row['cnt'];
+        }
+
+        return $stats;
+    }
 }

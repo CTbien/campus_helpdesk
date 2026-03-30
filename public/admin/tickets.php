@@ -8,29 +8,42 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'ADMIN') {
 }
 $user = $_SESSION['user'];
 
+// Filter parameters
+$filterStatus = $_GET['status'] ?? 'ALL';
+$filterPriority = $_GET['priority'] ?? 'ALL';
+
 require_once __DIR__ . '/../../app/services/TicketService.php';
 $ticketService = new TicketService();
-$tickets = $ticketService->getAdminTickets(); // Could be limited, but let's just get all for now
+
+$tickets = $ticketService->getAdminTickets($filterStatus, $filterPriority);
+
+// Counters
+$allTicketsForCount = $ticketService->getAdminTickets('ALL', 'ALL');
+$counts = ['OPEN' => 0, 'IN_PROGRESS' => 0, 'RESOLVED' => 0];
+foreach ($allTicketsForCount as $t) {
+    if (isset($counts[$t['statut']])) {
+        $counts[$t['statut']]++;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Administrateur - Campus HelpDesk</title>
+    <title>Tous les Tickets - Campus HelpDesk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; }
         .navbar-brand { font-weight: 600; }
-        .card { transition: transform 0.2s; border: none; border-radius: 10px; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+        .card { border: none; border-radius: 10px; }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="#"><i class="bi bi-hdd-network"></i> Campus HelpDesk <span class="badge bg-light text-primary ms-2">Admin</span></a>
+            <a class="navbar-brand" href="dashboard.php"><i class="bi bi-hdd-network"></i> Campus HelpDesk <span class="badge bg-light text-primary ms-2">Admin</span></a>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3"><i class="bi bi-person-circle"></i> <?= htmlspecialchars($user['nom'] ?? 'Admin') ?></span>
                 <a href="../auth/logout.php" class="btn btn-sm btn-outline-light">Déconnexion</a>
@@ -39,45 +52,31 @@ $tickets = $ticketService->getAdminTickets(); // Could be limited, but let's jus
     </nav>
     
     <div class="container py-5">
-        <h2 class="mb-4">Tableau de bord Administrateur</h2>
-        
-        <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 text-primary mb-3"><i class="bi bi-people"></i></div>
-                        <h5 class="card-title">Utilisateurs</h5>
-                        <p class="text-muted small">Gérer les comptes, les rôles et les accès de la plateforme.</p>
-                        <a href="users.php" class="btn btn-primary w-100">Gérer les utilisateurs</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 text-primary mb-3"><i class="bi bi-gear"></i></div>
-                        <h5 class="card-title">Paramètres</h5>
-                        <p class="text-muted small">Configuration globale et paramètres du HelpDesk.</p>
-                        <a href="settings.php" class="btn btn-outline-primary w-100">Configurer</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 text-primary mb-3"><i class="bi bi-bar-chart"></i></div>
-                        <h5 class="card-title">Statistiques</h5>
-                        <p class="text-muted small">Consulter les rapports et l'activité globale du centre de support.</p>
-                        <a href="statistics.php" class="btn btn-outline-primary w-100">Voir les Stats</a>
-                    </div>
-                </div>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gestion des Tickets</h2>
+            <a href="dashboard.php" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Retour</a>
         </div>
-
-        <h3 class="mb-3 mt-5">Aperçu des Tickets Récents</h3>
-        <div class="card shadow-sm">
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <form method="GET" class="d-flex align-items-center gap-3 m-0">
+                    <label class="fw-bold m-0"><i class="bi bi-funnel"></i> Filtres :</label>
+                    <select name="status" class="form-select w-auto" onchange="this.form.submit()">
+                        <option value="ALL" <?= $filterStatus === 'ALL' ? 'selected' : '' ?>>Tous (<?= count($allTicketsForCount) ?>)</option>
+                        <option value="OPEN" <?= $filterStatus === 'OPEN' ? 'selected' : '' ?>>Ouverts (<?= $counts['OPEN'] ?>)</option>
+                        <option value="IN_PROGRESS" <?= $filterStatus === 'IN_PROGRESS' ? 'selected' : '' ?>>En cours (<?= $counts['IN_PROGRESS'] ?>)</option>
+                        <option value="RESOLVED" <?= $filterStatus === 'RESOLVED' ? 'selected' : '' ?>>Résolus (<?= $counts['RESOLVED'] ?>)</option>
+                    </select>
+                    
+                    <select name="priority" class="form-select w-auto" onchange="this.form.submit()">
+                        <option value="ALL" <?= $filterPriority === 'ALL' ? 'selected' : '' ?>>Toutes priorités</option>
+                        <option value="HAUTE" <?= $filterPriority === 'HAUTE' ? 'selected' : '' ?>>Haute</option>
+                        <option value="MOYENNE" <?= $filterPriority === 'MOYENNE' ? 'selected' : '' ?>>Moyenne</option>
+                        <option value="BASSE" <?= $filterPriority === 'BASSE' ? 'selected' : '' ?>>Basse</option>
+                    </select>
+                    <noscript><button type="submit" class="btn btn-primary btn-sm">Filtrer</button></noscript>
+                </form>
+            </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
@@ -85,27 +84,32 @@ $tickets = $ticketService->getAdminTickets(); // Could be limited, but let's jus
                             <tr>
                                 <th>ID</th>
                                 <th>Sujet</th>
-                                <th>Auteur</th>
+                                <th>Demandeur</th>
                                 <th>Priorité</th>
                                 <th>Statut</th>
                                 <th>Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (empty($tickets)): ?>
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-muted">Aucun ticket dans le système.</td>
+                                    <td colspan="7" class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox display-4 d-block mb-3 text-secondary"></i>
+                                        <h5>Aucun ticket trouvé.</h5>
+                                    </td>
                                 </tr>
                             <?php else: ?>
-                                <?php $recentTickets = array_slice($tickets, 0, 5); // Show top 5 recent ?>
-                                <?php foreach ($recentTickets as $ticket): ?>
+                                <?php foreach ($tickets as $ticket): ?>
                                     <tr>
                                         <td>#<?= $ticket['id'] ?></td>
                                         <td>
-                                            <strong><a href="ticket_detail.php?id=<?= $ticket['id'] ?>" class="text-decoration-none"><?= htmlspecialchars($ticket['titre']) ?></a></strong><br>
+                                            <strong><?= htmlspecialchars($ticket['titre']) ?></strong><br>
                                             <span class="badge bg-secondary rounded-pill" style="font-size: 0.7em;"><?= htmlspecialchars($ticket['categorie_nom'] ?? 'Général') ?></span>
                                         </td>
-                                        <td><?= htmlspecialchars($ticket['auteur_nom'] ?? 'Inconnu') ?></td>
+                                        <td>
+                                            <?= htmlspecialchars($ticket['auteur_nom'] ?? 'Inconnu') ?>
+                                        </td>
                                         <td>
                                             <?php if ($ticket['priorite'] === 'HAUTE'): ?>
                                                 <span class="badge bg-danger">Haute</span>
@@ -125,15 +129,15 @@ $tickets = $ticketService->getAdminTickets(); // Could be limited, but let's jus
                                             <?php endif; ?>
                                         </td>
                                         <td><?= date('d/m/Y H:i', strtotime($ticket['created_at'])) ?></td>
+                                        <td>
+                                            <a href="ticket_detail.php?id=<?= $ticket['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Consulter</a>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer text-end bg-white">
-                <a href="tickets.php" class="btn btn-sm btn-outline-primary">Voir tous les tickets <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </div>

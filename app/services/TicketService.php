@@ -136,4 +136,8 @@ final class TicketService {
         }
         return ['success' => false, 'error' => 'Erreur lors de l\'envoi du message.'];
     }
+
+    public function getStatistics(): array {
+        return $this->ticketRepo->getStatistics();
+    }
 }

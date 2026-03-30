@@ -96,12 +96,7 @@ $mesTickets = $ticketService->getStudentTickets((int)$user['id']);
                 <div class="card shadow-sm h-100">
                     <div class="card-body p-4">
                         <h5 class="card-title">Centre d'aide</h5>
-                        <p class="text-muted small">Consultez nos articles avant d'ouvrir un ticket.</p>
-                        <ul class="list-unstyled">
-                            <li class="mb-3"><a href="#" class="text-decoration-none text-success"><i class="bi bi-book"></i> Comment se connecter au Wi-Fi ?</a></li>
-                            <li class="mb-3"><a href="#" class="text-decoration-none text-success"><i class="bi bi-book"></i> Mot de passe ENT oublié</a></li>
-                            <li class="mb-3"><a href="#" class="text-decoration-none text-success"><i class="bi bi-book"></i> Configurer l'imprimante</a></li>
-                        </ul>
+                        <p class="text-muted small">Contenu à venir.</p>
                     </div>
                 </div>
             </div>

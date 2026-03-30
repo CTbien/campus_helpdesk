@@ -26,4 +26,28 @@ final class CategoryRepo {
         $stmt->execute(['name' => $name]);
         return (int)db()->lastInsertId();
     }
+
+    public function findById(int $id): ?array {
+        $stmt = db()->prepare("SELECT id, libelle FROM categories WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $cat = $stmt->fetch();
+        return $cat ?: null;
+    }
+
+    public function update(int $id, string $name): bool {
+        $name = trim($name);
+        $stmt = db()->prepare("UPDATE categories SET libelle = :name WHERE id = :id");
+        return $stmt->execute(['name' => $name, 'id' => $id]);
+    }
+
+    public function delete(int $id): bool {
+        // Can only delete if no tickets are attached. Foreign key will restrict this naturally, but we handle it.
+        try {
+            $stmt = db()->prepare("DELETE FROM categories WHERE id = :id");
+            return $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            // Cannot delete because of constraints
+            return false;
+        }
+    }
 }

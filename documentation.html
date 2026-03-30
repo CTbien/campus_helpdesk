@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Complète - Campus HelpDesk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --sidebar-bg: #1e293b;
+            --sidebar-text: #94a3b8;
+            --sidebar-active: #e2e8f0;
+            --code-bg: #1e1e2e;
+            --code-text: #cdd6f4;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            margin: 0;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0; bottom: 0;
+            width: 280px; background: var(--sidebar-bg);
+            overflow-y: auto; padding: 24px 0; z-index: 100;
+        }
+        .sidebar h5 {
+            color: white; font-weight: 700; padding: 0 20px;
+            margin-bottom: 8px; font-size: 1.1rem;
+        }
+        .sidebar .logo {
+            color: white; font-size: 1.3rem; font-weight: 700;
+            padding: 0 20px 20px; border-bottom: 1px solid #334155;
+            margin-bottom: 16px;
+        }
+        .sidebar .logo i { color: var(--accent-blue); }
+        .sidebar a {
+            display: block; color: var(--sidebar-text); text-decoration: none;
+            padding: 8px 20px 8px 28px; font-size: 0.88rem;
+            transition: all 0.15s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: var(--sidebar-active); background: rgba(255,255,255,0.05);
+        }
+        .sidebar .section-title {
+            color: #64748b; font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            padding: 16px 20px 6px; margin: 0;
+        }
+        /* Main */
+        .main { margin-left: 280px; padding: 40px 48px 80px; max-width: 960px; }
+        h1 { font-size: 2rem; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+        h2 {
+            font-size: 1.5rem; font-weight: 700; color: #0f172a;
+            margin-top: 48px; margin-bottom: 16px;
+            padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;
+        }
+        h3 { font-size: 1.15rem; font-weight: 600; color: #1e293b; margin-top: 28px; }
+        h4 { font-size: 1rem; font-weight: 600; color: #334155; margin-top: 20px; }
+        p, li { line-height: 1.7; font-size: 0.95rem; }
+        /* Code */
+        pre {
+            background: var(--code-bg); color: var(--code-text);
+            border-radius: 8px; padding: 16px 20px;
+            font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            overflow-x: auto; line-height: 1.6;
+        }
+        code {
+            font-family: 'Fira Code', monospace;
+            background: #e2e8f0; color: #be185d;
+            padding: 2px 6px; border-radius: 4px; font-size: 0.85em;
+        }
+        pre code { background: none; color: inherit; padding: 0; }
+        /* Badges */
+        .file-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 6px;
+            font-family: 'Fira Code', monospace; font-size: 0.8rem;
+            font-weight: 500; margin: 2px 0;
+        }
+        .file-badge.php { background: #dbeafe; color: #1d4ed8; }
+        .file-badge.sql { background: #fef3c7; color: #92400e; }
+        .file-badge.config { background: #d1fae5; color: #065f46; }
+        /* Cards */
+        .info-card {
+            background: white; border-radius: 10px;
+            border: 1px solid #e2e8f0; padding: 20px;
+            margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .info-card.green { border-left: 4px solid var(--accent-green); }
+        .info-card.blue { border-left: 4px solid var(--accent-blue); }
+        .info-card.orange { border-left: 4px solid var(--accent-orange); }
+        .info-card.red { border-left: 4px solid var(--accent-red); }
+        .info-card.purple { border-left: 4px solid var(--accent-purple); }
+        .info-card h4 { margin-top: 0; }
+        /* Tree */
+        .tree { font-family: 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.8; background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; }
+        .tree .folder { color: #89b4fa; }
+        .tree .file { color: #a6e3a1; }
+        .tree .comment { color: #6c7086; }
+        /* Table */
+        .doc-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+        .doc-table th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+        .doc-table td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; }
+        .doc-table tr:hover td { background: #f8fafc; }
+        /* Flow diagram */
+        .flow-step {
+            display: flex; align-items: center; padding: 12px 0;
+        }
+        .flow-num {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--accent-blue); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+        }
+        .flow-arrow {
+            width: 30px; text-align: center; color: #94a3b8; flex-shrink: 0;
+        }
+        .flow-content {
+            background: white; border: 1px solid #e2e8f0; border-radius: 8px;
+            padding: 10px 16px; flex: 1;
+        }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+    <div class="logo"><i class="bi bi-hdd-network"></i> Campus HelpDesk</div>
+
+    <p class="section-title">Vue d'ensemble</p>
+    <a href="#intro">Introduction</a>
+    <a href="#archi">Architecture du projet</a>
+    <a href="#arborescence">Arborescence des fichiers</a>
+    <a href="#techno">Technologies utilisées</a>
+
+    <p class="section-title">Base de données</p>
+    <a href="#bdd-schema">Schéma (schema.sql)</a>
+    <a href="#bdd-seed">Données de test (seed.sql)</a>
+    <a href="#bdd-tables">Tables détaillées</a>
+
+    <p class="section-title">Backend (app/)</p>
+    <a href="#config-db">Configuration BDD (db.php)</a>
+    <a href="#middleware">Middleware (auth.php)</a>
+    <a href="#repo-user">UserRepo.php</a>
+    <a href="#repo-category">CategoryRepo.php</a>
+    <a href="#repo-ticket">TicketRepo.php</a>
+    <a href="#svc-auth">AuthService.php</a>
+    <a href="#svc-ticket">TicketService.php</a>
+    <a href="#svc-user">UserService.php</a>
+
+    <p class="section-title">Frontend (public/)</p>
+    <a href="#auth-pages">Authentification</a>
+    <a href="#student-pages">Espace Étudiant</a>
+    <a href="#tech-pages">Espace Technicien</a>
+    <a href="#admin-pages">Espace Admin</a>
+
+    <p class="section-title">Flux</p>
+    <a href="#flux-login">Connexion</a>
+    <a href="#flux-ticket">Cycle de vie d'un ticket</a>
+    <a href="#securite">Sécurité</a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ============================================ -->
+<h1 id="intro"><i class="bi bi-book"></i> Documentation Campus HelpDesk</h1>
+<p class="text-muted">Guide complet de l'architecture, du code et du fonctionnement du projet.</p>
+
+<div class="info-card blue">
+    <h4><i class="bi bi-info-circle"></i> Qu'est-ce que Campus HelpDesk ?</h4>
+    <p class="mb-0">C'est une application web de <strong>gestion de tickets d'assistance</strong> pour un campus. Les <strong>étudiants</strong> créent des tickets pour signaler des problèmes (Wi-Fi, matériel, logiciel…). Les <strong>techniciens</strong> traitent ces tickets. Les <strong>administrateurs</strong> supervisent le tout : utilisateurs, catégories et statistiques.</p>
+</div>
+
+<!-- ============================================ -->
+<h2 id="archi"><i class="bi bi-diagram-3"></i> Architecture du projet</h2>
+<p>Le projet suit une architecture <strong>MVC simplifiée en PHP natif</strong> (sans framework) :</p>
+
+<div class="info-card green">
+    <h4>Les 3 couches</h4>
+    <ul>
+        <li><strong>Repositories</strong> (Modèle) → Accèdent à la base de données via PDO. Chaque table a son Repository.</li>
+        <li><strong>Services</strong> (Contrôleur / Logique métier) → Utilisent les Repositories et appliquent les règles métier (validation, hashing, contrôle d'accès).</li>
+        <li><strong>Pages PHP publiques</strong> (Vue + Contrôleur frontal) → Chaque fichier dans <code>public/</code> est à la fois le contrôleur de la page ET la vue HTML.</li>
+    </ul>
+</div>
+
+<p>Le flux d'une requête est toujours :</p>
+<div class="flow-step">
+    <div class="flow-num">1</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Navigateur</strong> appelle <code>public/student/dashboard.php</code></div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">2</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Page PHP</strong> vérifie la session, puis appelle un <strong>Service</strong></div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">3</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Service</strong> appelle un <strong>Repository</strong> pour lire/écrire en BDD</div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">4</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Repository</strong> exécute une requête SQL préparée via <strong>PDO</strong></div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">5</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content">Les données remontent → la page PHP génère le <strong>HTML</strong> avec Bootstrap</div>
+</div>
+
+<!-- ============================================ -->
+<h2 id="arborescence"><i class="bi bi-folder2-open"></i> Arborescence des fichiers</h2>
+<div class="tree">
+<span class="folder">campus_helpdesk/</span>
+├── <span class="folder">app/</span>                          <span class="comment">← Backend (logique PHP)</span>
+│   ├── <span class="folder">config/</span>
+│   │   └── <span class="file">db.php</span>               <span class="comment">← Connexion MySQL (PDO)</span>
+│   ├── <span class="folder">middleware/</span>
+│   │   └── <span class="file">auth.php</span>             <span class="comment">← Fonctions requireLogin / requireRole</span>
+│   ├── <span class="folder">repositories/</span>
+│   │   ├── <span class="file">UserRepo.php</span>         <span class="comment">← CRUD table "utilisateurs"</span>
+│   │   ├── <span class="file">CategoryRepo.php</span>     <span class="comment">← CRUD table "categories"</span>
+│   │   └── <span class="file">TicketRepo.php</span>       <span class="comment">← CRUD table "tickets" + messages + stats</span>
+│   └── <span class="folder">services/</span>
+│       ├── <span class="file">AuthService.php</span>      <span class="comment">← Login, vérification mot de passe, redirection</span>
+│       ├── <span class="file">TicketService.php</span>    <span class="comment">← Logique métier des tickets</span>
+│       └── <span class="file">UserService.php</span>      <span class="comment">← Logique métier des utilisateurs</span>
+├── <span class="folder">db/</span>                           <span class="comment">← Scripts SQL</span>
+│   ├── <span class="file">schema.sql</span>               <span class="comment">← Création de la base + tables</span>
+│   └── <span class="file">seed.sql</span>                 <span class="comment">← Données de test</span>
+├── <span class="folder">public/</span>                       <span class="comment">← Frontend (pages PHP accessibles)</span>
+│   ├── <span class="folder">auth/</span>
+│   │   ├── <span class="file">login.php</span>            <span class="comment">← Page de connexion</span>
+│   │   └── <span class="file">logout.php</span>           <span class="comment">← Déconnexion (détruit la session)</span>
+│   ├── <span class="folder">student/</span>
+│   │   ├── <span class="file">dashboard.php</span>        <span class="comment">← Tableau de bord étudiant</span>
+│   │   ├── <span class="file">create_ticket.php</span>    <span class="comment">← Formulaire de création de ticket</span>
+│   │   └── <span class="file">ticket_detail.php</span>    <span class="comment">← Détail d'un ticket + messages</span>
+│   ├── <span class="folder">tech/</span>
+│   │   ├── <span class="file">dashboard.php</span>        <span class="comment">← File d'attente technicien</span>
+│   │   └── <span class="file">ticket_detail.php</span>    <span class="comment">← Traitement d'un ticket</span>
+│   └── <span class="folder">admin/</span>
+│       ├── <span class="file">dashboard.php</span>        <span class="comment">← Tableau de bord administrateur</span>
+│       ├── <span class="file">users.php</span>            <span class="comment">← Liste des utilisateurs</span>
+│       ├── <span class="file">user_form.php</span>        <span class="comment">← Créer / éditer un utilisateur</span>
+│       ├── <span class="file">user_toggle.php</span>      <span class="comment">← Activer / désactiver un utilisateur</span>
+│       ├── <span class="file">tickets.php</span>          <span class="comment">← Liste complète des tickets</span>
+│       ├── <span class="file">ticket_detail.php</span>    <span class="comment">← Détail d'un ticket (admin)</span>
+│       ├── <span class="file">settings.php</span>         <span class="comment">← Gestion des catégories</span>
+│       └── <span class="file">statistics.php</span>       <span class="comment">← Statistiques avec graphiques</span>
+└── <span class="file">documentation.html</span>           <span class="comment">← Ce fichier !</span>
+</div>
+
+<!-- ============================================ -->
+<h2 id="techno"><i class="bi bi-cpu"></i> Technologies utilisées</h2>
+<table class="doc-table">
+    <tr><th>Technologie</th><th>Rôle</th></tr>
+    <tr><td><strong>PHP 8+</strong></td><td>Langage serveur (avec <code>declare(strict_types=1)</code> partout)</td></tr>
+    <tr><td><strong>MySQL</strong></td><td>Base de données relationnelle</td></tr>
+    <tr><td><strong>PDO</strong></td><td>Couche d'accès BDD sécurisée (requêtes préparées)</td></tr>
+    <tr><td><strong>Sessions PHP</strong></td><td>Authentification (données stockées côté serveur)</td></tr>
+    <tr><td><strong>Bootstrap 5.3</strong></td><td>Framework CSS pour l'interface</td></tr>
+    <tr><td><strong>Bootstrap Icons</strong></td><td>Icônes vectorielles</td></tr>
+    <tr><td><strong>Chart.js</strong></td><td>Graphiques interactifs (page statistiques)</td></tr>
+    <tr><td><strong>XAMPP</strong></td><td>Serveur local Apache + MySQL</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="bdd-schema"><i class="bi bi-database"></i> Base de données — Schéma</h2>
+<p>Le fichier <span class="file-badge sql">db/schema.sql</span> crée la base <code>campus_helpdesk</code> et ses 4 tables.</p>
+
+<h3 id="bdd-tables">Les 4 tables</h3>
+
+<div class="info-card purple">
+<h4><i class="bi bi-people"></i> Table : utilisateurs</h4>
+<p>Stocke tous les utilisateurs du système (étudiants, techniciens, administrateurs).</p>
+<table class="doc-table">
+    <tr><th>Colonne</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>id</code></td><td>INT AUTO_INCREMENT</td><td>Identifiant unique</td></tr>
+    <tr><td><code>nom</code></td><td>VARCHAR(100)</td><td>Nom complet</td></tr>
+    <tr><td><code>email</code></td><td>VARCHAR(150) UNIQUE</td><td>Adresse email (login)</td></tr>
+    <tr><td><code>mdp_hash</code></td><td>VARCHAR(255)</td><td>Mot de passe hashé (bcrypt)</td></tr>
+    <tr><td><code>role</code></td><td>ENUM('ETUDIANT','TECH','ADMIN')</td><td>Rôle de l'utilisateur</td></tr>
+    <tr><td><code>actif</code></td><td>TINYINT(1)</td><td>1 = actif, 0 = désactivé</td></tr>
+    <tr><td><code>created_at</code></td><td>DATETIME</td><td>Date de création du compte</td></tr>
+</table>
+</div>
+
+<div class="info-card orange">
+<h4><i class="bi bi-tags"></i> Table : categories</h4>
+<p>Les catégories de tickets (ex: Réseau, Matériel, Logiciel…).</p>
+<table class="doc-table">
+    <tr><th>Colonne</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>id</code></td><td>INT AUTO_INCREMENT</td><td>Identifiant unique</td></tr>
+    <tr><td><code>libelle</code></td><td>VARCHAR(80) UNIQUE</td><td>Nom de la catégorie</td></tr>
+</table>
+</div>
+
+<div class="info-card blue">
+<h4><i class="bi bi-ticket-perforated"></i> Table : tickets</h4>
+<p>Le cœur du système : chaque demande d'assistance est un ticket.</p>
+<table class="doc-table">
+    <tr><th>Colonne</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>id</code></td><td>INT AUTO_INCREMENT</td><td>Identifiant unique</td></tr>
+    <tr><td><code>titre</code></td><td>VARCHAR(120)</td><td>Sujet du problème</td></tr>
+    <tr><td><code>description</code></td><td>TEXT</td><td>Description détaillée</td></tr>
+    <tr><td><code>priorite</code></td><td>ENUM('BASSE','MOYENNE','HAUTE')</td><td>Niveau d'urgence</td></tr>
+    <tr><td><code>statut</code></td><td>ENUM('OPEN','IN_PROGRESS','RESOLVED','CLOSED')</td><td>État actuel</td></tr>
+    <tr><td><code>categorie_id</code></td><td>INT (FK → categories)</td><td>Catégorie du ticket</td></tr>
+    <tr><td><code>cree_par</code></td><td>INT (FK → utilisateurs)</td><td>Créateur du ticket</td></tr>
+    <tr><td><code>assigne_a</code></td><td>INT NULL (FK → utilisateurs)</td><td>Technicien assigné</td></tr>
+    <tr><td><code>created_at</code></td><td>DATETIME</td><td>Date de création</td></tr>
+    <tr><td><code>updated_at</code></td><td>DATETIME</td><td>Dernière mise à jour (auto)</td></tr>
+</table>
+</div>
+
+<div class="info-card green">
+<h4><i class="bi bi-chat-dots"></i> Table : messages_ticket</h4>
+<p>Messages échangés entre l'étudiant et le technicien sur un ticket.</p>
+<table class="doc-table">
+    <tr><th>Colonne</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>ticket_id</code></td><td>INT (FK → tickets, ON DELETE CASCADE)</td><td>Ticket concerné</td></tr>
+    <tr><td><code>user_id</code></td><td>INT (FK → utilisateurs)</td><td>Auteur du message</td></tr>
+    <tr><td><code>message</code></td><td>TEXT</td><td>Contenu du message</td></tr>
+    <tr><td><code>created_at</code></td><td>DATETIME</td><td>Date d'envoi</td></tr>
+</table>
+</div>
+
+<h3 id="bdd-seed">Données de test (seed.sql)</h3>
+<p>Le fichier <span class="file-badge sql">db/seed.sql</span> insère :</p>
+<ul>
+    <li><strong>4 catégories</strong> : Réseau/Wi-Fi, Matériel, Logiciel, Compte/Accès</li>
+    <li><strong>3 utilisateurs</strong> : un étudiant, un tech, un admin (mot de passe : <code>Demo1234!</code>)</li>
+    <li><strong>2 tickets</strong> d'exemple avec des messages</li>
+</ul>
+
+<!-- ============================================ -->
+<h2 id="config-db"><i class="bi bi-gear"></i> Configuration BDD — db.php</h2>
+<p><span class="file-badge config">app/config/db.php</span></p>
+<div class="info-card green">
+<p>Ce fichier définit <strong>une seule fonction</strong> <code>db()</code> qui retourne une instance PDO unique (pattern Singleton) :</p>
+<pre><code>function db(): PDO {
+  static $pdo = null;          // Variable statique = une seule instance
+  if ($pdo === null) {
+    $dsn = "mysql:host=127.0.0.1;dbname=campus_helpdesk;charset=utf8mb4";
+    $pdo = new PDO($dsn, "root", "", [
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,       // Erreurs = exceptions
+      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,  // Résultats = tableaux associatifs
+      PDO::ATTR_EMULATE_PREPARES => false,                // Vraies requêtes préparées
+    ]);
+  }
+  return $pdo;
+}</code></pre>
+<p class="mb-0"><strong>static $pdo</strong> : la variable survit entre les appels. On ne crée la connexion qu'<strong>une seule fois</strong> par requête HTTP.</p>
+</div>
+
+<!-- ============================================ -->
+<h2 id="middleware"><i class="bi bi-shield-lock"></i> Middleware — auth.php</h2>
+<p><span class="file-badge php">app/middleware/auth.php</span></p>
+<p>Deux fonctions utilitaires de sécurité :</p>
+<pre><code>function requireLogin(): void {
+  // Redirige vers login si pas connecté
+  if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit;
+  }
+}
+
+function requireRole(array $roles): void {
+  // Bloque l'accès si le rôle n'est pas autorisé
+  $role = $_SESSION['user']['role'] ?? null;
+  if (!$role || !in_array($role, $roles, true)) {
+    http_response_code(403);
+    echo "&lt;h1&gt;403 Interdit&lt;/h1&gt;";
+    exit;
+  }
+}</code></pre>
+
+<!-- ============================================ -->
+<h2 id="repo-user"><i class="bi bi-person-lines-fill"></i> UserRepo.php</h2>
+<p><span class="file-badge php">app/repositories/UserRepo.php</span> — Accès à la table <code>utilisateurs</code>.</p>
+<table class="doc-table">
+    <tr><th>Méthode</th><th>Description</th><th>Requête SQL</th></tr>
+    <tr><td><code>findByEmail($email)</code></td><td>Cherche un utilisateur par email</td><td><code>SELECT ... WHERE email = :email LIMIT 1</code></td></tr>
+    <tr><td><code>findAll()</code></td><td>Liste tous les utilisateurs</td><td><code>SELECT ... ORDER BY nom ASC</code></td></tr>
+    <tr><td><code>findById($id)</code></td><td>Récupère un utilisateur par ID</td><td><code>SELECT ... WHERE id = :id</code></td></tr>
+    <tr><td><code>create($nom, $email, $hash, $role)</code></td><td>Crée un utilisateur</td><td><code>INSERT INTO utilisateurs ...</code></td></tr>
+    <tr><td><code>update($id, $nom, $email, $role)</code></td><td>Met à jour un utilisateur</td><td><code>UPDATE utilisateurs SET ...</code></td></tr>
+    <tr><td><code>updatePassword($id, $hash)</code></td><td>Change le mot de passe</td><td><code>UPDATE ... SET mdp_hash = :mdp_hash</code></td></tr>
+    <tr><td><code>toggleStatus($id)</code></td><td>Inverse le statut actif/inactif</td><td><code>UPDATE ... SET actif = NOT actif</code></td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="repo-category"><i class="bi bi-tags"></i> CategoryRepo.php</h2>
+<p><span class="file-badge php">app/repositories/CategoryRepo.php</span> — Accès à la table <code>categories</code>.</p>
+<table class="doc-table">
+    <tr><th>Méthode</th><th>Description</th></tr>
+    <tr><td><code>getAllCategories()</code></td><td>Retourne toutes les catégories triées alphabétiquement</td></tr>
+    <tr><td><code>getOrCreateCategory($name)</code></td><td>Cherche une catégorie ; si elle n'existe pas, la crée. Retourne son ID</td></tr>
+    <tr><td><code>findById($id)</code></td><td>Récupère une catégorie par son ID</td></tr>
+    <tr><td><code>update($id, $name)</code></td><td>Renomme une catégorie</td></tr>
+    <tr><td><code>delete($id)</code></td><td>Supprime une catégorie (échoue si des tickets y sont liés grâce à la clé étrangère)</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="repo-ticket"><i class="bi bi-ticket-perforated"></i> TicketRepo.php</h2>
+<p><span class="file-badge php">app/repositories/TicketRepo.php</span> — Le plus gros repository. Gère tickets, messages et statistiques.</p>
+<table class="doc-table">
+    <tr><th>Méthode</th><th>Description</th></tr>
+    <tr><td><code>createTicket(...)</code></td><td>Crée un ticket (INSERT) et retourne son ID</td></tr>
+    <tr><td><code>getTicketsByUser($userId)</code></td><td>Tickets créés par un étudiant (pour le dashboard étudiant)</td></tr>
+    <tr><td><code>getTicketsForTech($status, $priority)</code></td><td>Tous les tickets avec filtres optionnels + JOIN catégories et utilisateurs. Ordonnés par urgence (OPEN en premier)</td></tr>
+    <tr><td><code>getTicketsForAdmin(...)</code></td><td>Identique à getTicketsForTech (l'admin voit tout)</td></tr>
+    <tr><td><code>getTicketById($id)</code></td><td>Détail d'un ticket avec noms de l'auteur, catégorie et technicien assigné</td></tr>
+    <tr><td><code>updateTicketStatus($id, $status)</code></td><td>Change le statut (OPEN → IN_PROGRESS → RESOLVED)</td></tr>
+    <tr><td><code>assignTicket($id, $techId)</code></td><td>Assigne un technicien + passe en IN_PROGRESS automatiquement</td></tr>
+    <tr><td><code>addMessage($ticketId, $userId, $msg)</code></td><td>Ajoute un message dans l'espace d'échange</td></tr>
+    <tr><td><code>getMessagesByTicket($ticketId)</code></td><td>Récupère tous les messages d'un ticket avec le nom et rôle de l'auteur</td></tr>
+    <tr><td><code>getStatistics()</code></td><td>Compte les tickets par statut, par priorité, par catégorie + total. Utilisé par la page stats admin</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="svc-auth"><i class="bi bi-key"></i> AuthService.php</h2>
+<p><span class="file-badge php">app/services/AuthService.php</span> — Gère la connexion.</p>
+
+<h4>Méthode <code>login($email, $password)</code></h4>
+<ol>
+    <li>Valide le format de l'email avec <code>filter_var()</code></li>
+    <li>Cherche l'utilisateur en BDD via <code>UserRepo::findByEmail()</code></li>
+    <li>Vérifie que le compte est <strong>actif</strong> (<code>actif = 1</code>)</li>
+    <li>Compare le mot de passe avec le hash via <code>password_verify()</code></li>
+    <li>Retourne <code>['ok' => true, 'user' => [...]]</code> ou <code>['ok' => false, 'error' => '...']</code></li>
+</ol>
+
+<h4>Méthode <code>redirectByRole($role)</code></h4>
+<p>Redirige automatiquement vers le bon dashboard selon le rôle :</p>
+<ul>
+    <li><code>ADMIN</code> → <code>../admin/dashboard.php</code></li>
+    <li><code>TECH</code> → <code>../tech/dashboard.php</code></li>
+    <li><code>ETUDIANT</code> → <code>../student/dashboard.php</code></li>
+</ul>
+
+<!-- ============================================ -->
+<h2 id="svc-ticket"><i class="bi bi-gear-wide-connected"></i> TicketService.php</h2>
+<p><span class="file-badge php">app/services/TicketService.php</span> — Couche métier entre les pages et le TicketRepo.</p>
+
+<div class="info-card blue">
+<h4>Pourquoi un Service en plus du Repository ?</h4>
+<p class="mb-0">Le Repository ne fait <strong>que du SQL</strong>. Le Service ajoute la <strong>logique métier</strong> : validation des données, gestion des nouvelles catégories, contrôle d'accès (un étudiant ne peut pas voir le ticket d'un autre), etc.</p>
+</div>
+
+<table class="doc-table">
+    <tr><th>Méthode</th><th>Logique métier ajoutée</th></tr>
+    <tr><td><code>createTicket($data, $userId)</code></td><td>Valide titre/description, vérifie la priorité, gère la catégorie "Autre" (création dynamique)</td></tr>
+    <tr><td><code>getTicketDetails($id, $userId, $role)</code></td><td><strong>Contrôle d'accès</strong> : un étudiant ne voit que SES tickets. Un tech/admin voit tout</td></tr>
+    <tr><td><code>updateStatus($id, $status, $role)</code></td><td>Bloque les étudiants (seuls tech/admin peuvent changer le statut)</td></tr>
+    <tr><td><code>assignToTech($id, $techId, $role)</code></td><td>Bloque les étudiants</td></tr>
+    <tr><td><code>addMessage($id, $userId, $role, $msg)</code></td><td>Un étudiant ne peut poster que sur SES tickets. Vérifie que le message n'est pas vide</td></tr>
+    <tr><td><code>getStatistics()</code></td><td>Expose les statistiques du TicketRepo</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="svc-user"><i class="bi bi-person-gear"></i> UserService.php</h2>
+<p><span class="file-badge php">app/services/UserService.php</span> — Logique métier pour la gestion des utilisateurs (admin seulement).</p>
+<table class="doc-table">
+    <tr><th>Méthode</th><th>Ce qu'elle fait</th></tr>
+    <tr><td><code>createUser($data)</code></td><td>Valide nom/email/mot de passe, vérifie l'unicité de l'email, <strong>hash le mot de passe avec bcrypt</strong>, puis insère</td></tr>
+    <tr><td><code>updateUser($id, $data)</code></td><td>Met à jour les infos. Si un nouveau mot de passe est fourni, le hash est aussi mis à jour</td></tr>
+    <tr><td><code>toggleUserStatus($id)</code></td><td>Active ou désactive un compte</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="auth-pages"><i class="bi bi-box-arrow-in-right"></i> Pages — Authentification</h2>
+
+<h3>login.php</h3>
+<p><span class="file-badge php">public/auth/login.php</span></p>
+<ol>
+    <li>Si l'utilisateur est <strong>déjà connecté</strong> (session existante), il est redirigé automatiquement vers son dashboard</li>
+    <li>Si <code>POST</code> : on appelle <code>AuthService::login()</code>, on stocke l'utilisateur en session, on régénère l'ID de session (<strong>anti session fixation</strong>), puis on redirige</li>
+    <li>Affiche un formulaire Bootstrap simple (email + mot de passe)</li>
+</ol>
+
+<h3>logout.php</h3>
+<p><span class="file-badge php">public/auth/logout.php</span></p>
+<p>Détruit complètement la session : vide <code>$_SESSION</code>, supprime le cookie de session, appelle <code>session_destroy()</code>, puis redirige vers login.</p>
+
+<!-- ============================================ -->
+<h2 id="student-pages"><i class="bi bi-mortarboard"></i> Pages — Espace Étudiant</h2>
+<p>Toutes ces pages vérifient que <code>$_SESSION['user']</code> existe, sinon → redirection vers login.</p>
+
+<h3>dashboard.php</h3>
+<p>Affiche la liste des tickets de l'étudiant connecté dans un tableau (appelle <code>getStudentTickets()</code>). Chaque ligne est cliquable pour voir le détail. Bouton "Nouveau Ticket" en haut.</p>
+
+<h3>create_ticket.php</h3>
+<p>Formulaire de création avec : titre, catégorie (dropdown + option "Autre"), priorité, description. Sur soumission, appelle <code>TicketService::createTicket()</code>.</p>
+<div class="info-card orange">
+<h4><i class="bi bi-lightbulb"></i> Fonctionnalité intéressante</h4>
+<p class="mb-0">Quand l'étudiant choisit "Autre" dans le menu des catégories, un champ texte apparaît (via JavaScript) pour saisir le nom d'une nouvelle catégorie. Le service la crée automatiquement en BDD.</p>
+</div>
+
+<h3>ticket_detail.php</h3>
+<p>Affiche le détail complet d'un ticket + l'espace d'échange (messages). L'étudiant peut ajouter des messages <strong>seulement si le ticket n'est pas résolu</strong>. Il ne peut <strong>pas</strong> changer le statut.</p>
+
+<!-- ============================================ -->
+<h2 id="tech-pages"><i class="bi bi-tools"></i> Pages — Espace Technicien</h2>
+<p>Accès réservé au rôle <code>TECH</code>.</p>
+
+<h3>dashboard.php</h3>
+<p>File d'attente avec filtres dynamiques (statut + priorité, via des <code>&lt;select&gt;</code> avec <code>onchange="this.form.submit()"</code>). Les tickets sont triés : OPEN en premier, puis IN_PROGRESS, puis RESOLVED. Bouton "œil" pour consulter chaque ticket.</p>
+
+<h3>ticket_detail.php</h3>
+<p>Interface complète de traitement. Le technicien peut :</p>
+<ul>
+    <li><strong>S'assigner le ticket</strong> (bouton "Assigner à moi") → passe automatiquement en IN_PROGRESS</li>
+    <li><strong>Changer le statut</strong> (OPEN / IN_PROGRESS / RESOLVED) via un dropdown</li>
+    <li><strong>Envoyer des messages</strong> dans l'espace d'échange</li>
+</ul>
+<p><strong>Note :</strong> Ce fichier accepte aussi les ADMIN (vérification <code>in_array($role, ['TECH', 'ADMIN'])</code>).</p>
+
+<!-- ============================================ -->
+<h2 id="admin-pages"><i class="bi bi-shield-check"></i> Pages — Espace Admin</h2>
+<p>Accès réservé au rôle <code>ADMIN</code>.</p>
+
+<h3>dashboard.php</h3>
+<p>Hub central avec 3 cartes cliquables (Utilisateurs, Paramètres, Statistiques) + aperçu des 5 tickets les plus récents (cliquables).</p>
+
+<h3>users.php + user_form.php + user_toggle.php</h3>
+<p><strong>Gestion complète des utilisateurs :</strong></p>
+<ul>
+    <li><strong>users.php</strong> : tableau avec tous les utilisateurs, leur rôle (badge coloré), leur statut (Actif/Inactif), et boutons Éditer/Désactiver</li>
+    <li><strong>user_form.php</strong> : formulaire unique pour créer OU éditer (détecte le paramètre <code>?id=</code> dans l'URL). En édition, le mot de passe est optionnel</li>
+    <li><strong>user_toggle.php</strong> : action POST qui active/désactive un utilisateur (empêche l'admin de se désactiver lui-même)</li>
+</ul>
+
+<h3>tickets.php + ticket_detail.php</h3>
+<p>Liste complète de tous les tickets avec filtres (comme le tech dashboard) + vue détaillée avec toutes les actions (assigner, changer statut, envoyer messages).</p>
+
+<h3>settings.php</h3>
+<p>Gestion des catégories de tickets : ajouter, renommer (édition inline avec JS), supprimer (avec confirmation). La suppression échoue si des tickets utilisent la catégorie.</p>
+
+<h3>statistics.php</h3>
+<p>Dashboard visuel avec :</p>
+<ul>
+    <li><strong>4 cartes KPI</strong> : Total, Ouverts, En cours, Résolus</li>
+    <li><strong>3 graphiques Chart.js</strong> : Doughnut (par statut), Pie (par priorité), Bar (par catégorie)</li>
+</ul>
+
+<!-- ============================================ -->
+<h2 id="flux-login"><i class="bi bi-arrow-right-circle"></i> Flux — Connexion</h2>
+
+<div class="flow-step">
+    <div class="flow-num">1</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content">L'utilisateur ouvre <code>login.php</code> et entre son email + mot de passe</div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">2</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><code>AuthService::login()</code> valide l'email, cherche en BDD, vérifie le hash bcrypt</div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">3</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content">Si OK : <code>session_regenerate_id(true)</code> + stockage de <code>$_SESSION['user']</code> (id, nom, email, role)</div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">4</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><code>redirectByRole()</code> envoie vers <code>/admin/</code>, <code>/tech/</code> ou <code>/student/</code></div>
+</div>
+<div class="flow-step">
+    <div class="flow-num">5</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content">Chaque page vérifie la session au début. Si absente → retour à login</div>
+</div>
+
+<!-- ============================================ -->
+<h2 id="flux-ticket"><i class="bi bi-arrow-repeat"></i> Flux — Cycle de vie d'un ticket</h2>
+
+<div class="flow-step">
+    <div class="flow-num" style="background: var(--accent-green);">1</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Création</strong> : L'étudiant remplit le formulaire → statut = <code>OPEN</code>, assigne_a = <code>NULL</code></div>
+</div>
+<div class="flow-step">
+    <div class="flow-num" style="background: var(--accent-orange);">2</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Prise en charge</strong> : Un tech clique "Assigner à moi" → statut = <code>IN_PROGRESS</code>, assigne_a = tech.id</div>
+</div>
+<div class="flow-step">
+    <div class="flow-num" style="background: var(--accent-blue);">3</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Échange</strong> : Tech et étudiant discutent via les messages du ticket</div>
+</div>
+<div class="flow-step">
+    <div class="flow-num" style="background: var(--accent-purple);">4</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-content"><strong>Résolution</strong> : Le tech clique "Marquer Résolu" → statut = <code>RESOLVED</code>. L'étudiant ne peut plus poster</div>
+</div>
+
+<!-- ============================================ -->
+<h2 id="securite"><i class="bi bi-lock"></i> Sécurité</h2>
+
+<div class="info-card red">
+<h4>Mesures de sécurité implémentées</h4>
+<ul class="mb-0">
+    <li><strong>Requêtes préparées PDO</strong> : toutes les requêtes SQL utilisent des paramètres nommés (<code>:email</code>, <code>:id</code>) → protection contre les <strong>injections SQL</strong></li>
+    <li><strong>password_hash / password_verify</strong> : les mots de passe sont hashés en <strong>bcrypt</strong> → jamais stockés en clair</li>
+    <li><strong>htmlspecialchars()</strong> : partout dans l'affichage HTML → protection contre les <strong>attaques XSS</strong></li>
+    <li><strong>session_regenerate_id(true)</strong> : après le login → protection contre le <strong>session fixation</strong></li>
+    <li><strong>Contrôle d'accès par rôle</strong> : chaque page vérifie le rôle en session. Un étudiant ne peut pas accéder aux pages tech/admin</li>
+    <li><strong>Contrôle côté serveur</strong> : un étudiant ne peut voir/modifier que SES tickets (vérifié dans TicketService, pas juste dans le HTML)</li>
+    <li><strong>Destruction complète de session</strong> : le logout vide la session ET supprime le cookie</li>
+    <li><strong>declare(strict_types=1)</strong> : active le typage strict PHP → réduit les bugs liés aux conversions implicites</li>
+</ul>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Highlight active sidebar link on scroll
+const sections = document.querySelectorAll('h1[id], h2[id], h3[id]');
+const links = document.querySelectorAll('.sidebar a');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    links.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+});
+</script>
+</body>
+</html>
