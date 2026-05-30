@@ -154,4 +154,30 @@ final class TicketRepo {
 
         return $stats;
     }
+
+    public function addHistory(int $ticketId, int $userId, string $action, ?string $oldValue = null, ?string $newValue = null): bool {
+        $stmt = db()->prepare(
+            "INSERT INTO historique_tickets (ticket_id, user_id, action, old_value, new_value)
+             VALUES (:ticket_id, :user_id, :action, :old_val, :new_val)"
+        );
+        return $stmt->execute([
+            'ticket_id' => $ticketId,
+            'user_id' => $userId,
+            'action' => $action,
+            'old_val' => $oldValue,
+            'new_val' => $newValue
+        ]);
+    }
+
+    public function getTicketHistory(int $ticketId): array {
+        $stmt = db()->prepare(
+            "SELECT h.*, u.nom as auteur_nom, u.role as auteur_role
+             FROM historique_tickets h
+             JOIN utilisateurs u ON h.user_id = u.id
+             WHERE h.ticket_id = :ticket_id
+             ORDER BY h.created_at ASC"
+        );
+        $stmt->execute(['ticket_id' => $ticketId]);
+        return $stmt->fetchAll();
+    }
 }

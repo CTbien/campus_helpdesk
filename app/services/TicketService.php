@@ -46,6 +46,8 @@ final class TicketService {
             }
 
             $ticketId = $this->ticketRepo->createTicket($title, $description, $catId, $priority, $userId);
+            
+            $this->ticketRepo->addHistory($ticketId, $userId, 'CREATION');
 
             return [
                 'success' => true,
@@ -84,11 +86,12 @@ final class TicketService {
 
         $messages = $this->ticketRepo->getMessagesByTicket($ticketId);
         $ticket['messages'] = $messages;
+        $ticket['historique'] = $this->ticketRepo->getTicketHistory($ticketId);
 
         return $ticket;
     }
 
-    public function updateStatus(int $ticketId, string $status, string $userRole): array {
+    public function updateStatus(int $ticketId, string $status, int $userId, string $userRole): array {
         if ($userRole === 'ETUDIANT') {
             return ['success' => false, 'error' => 'Action non autorisée.'];
         }
@@ -98,20 +101,35 @@ final class TicketService {
             return ['success' => false, 'error' => 'Statut invalide.'];
         }
 
+        $ticket = $this->ticketRepo->getTicketById($ticketId);
+        if (!$ticket) {
+            return ['success' => false, 'error' => 'Ticket non trouvé.'];
+        }
+        $oldStatus = $ticket['statut'];
+
         $success = $this->ticketRepo->updateTicketStatus($ticketId, $status);
         if ($success) {
+            $this->ticketRepo->addHistory($ticketId, $userId, 'STATUT', $oldStatus, $status);
             return ['success' => true, 'message' => 'Statut mis à jour.'];
         }
         return ['success' => false, 'error' => 'Erreur lors de la mise à jour.'];
     }
 
-    public function assignToTech(int $ticketId, int $techId, string $userRole): array {
+    public function assignToTech(int $ticketId, int $techId, int $userId, string $userRole): array {
         if ($userRole === 'ETUDIANT') {
             return ['success' => false, 'error' => 'Action non autorisée.'];
         }
 
+        $ticket = $this->ticketRepo->getTicketById($ticketId);
+        if (!$ticket) {
+            return ['success' => false, 'error' => 'Ticket non trouvé.'];
+        }
+        $oldAssignee = $ticket['assigne_nom'] ?? 'Non assigné';
+
         $success = $this->ticketRepo->assignTicket($ticketId, $techId);
         if ($success) {
+            //MODIF addHistory
+            $this->ticketRepo->addHistory($ticketId, $userId, 'ASSIGNATION', $oldAssignee, (string)$techId);
             return ['success' => true, 'message' => 'Ticket assigné avec succès.'];
         }
         return ['success' => false, 'error' => 'Erreur lors de l\'assignation.'];

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation du Projet - Campus HelpDesk</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --accent-primary: #3b82f6;   /* Blue */
+            --accent-secondary: #8b5cf6; /* Purple */
+            --accent-tertiary: #10b981;  /* Green */
+            --accent-admin: #ef4444;     /* Red */
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Hero Section with Glassmorphism */
+        .hero {
+            position: relative;
+            padding: 100px 0 80px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Decorative Background Blobs */
+        .hero::before, .hero::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+        }
+        .hero::before {
+            width: 400px;
+            height: 400px;
+            background: rgba(59, 130, 246, 0.3);
+            top: -100px;
+            left: -100px;
+        }
+        .hero::after {
+            width: 300px;
+            height: 300px;
+            background: rgba(139, 92, 246, 0.3);
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        .hero p.lead {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .btn-custom {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            color: white;
+        }
+        .btn-outline-custom {
+            background: white;
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+        }
+        .btn-outline-custom:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--text-main);
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 30px;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .bg-student { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+        .bg-tech { background: linear-gradient(135deg, #10b981, #34d399); }
+        .bg-admin { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+        .feature-card ul {
+            padding-left: 20px;
+            margin-top: 15px;
+            color: var(--text-muted);
+        }
+        .feature-card li { margin-bottom: 8px; }
+
+        /* Tech Stack */
+        .tech-badge {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin: 10px;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .tech-badge:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-primary);
+        }
+        .tech-badge i { font-size: 1.5rem; }
+        .php-color { color: #777bb3; }
+        .mysql-color { color: #00758f; }
+        .bs-color { color: #7952b3; }
+        .secure-color { color: #10b981; }
+
+        /* Architecture Section */
+        .archi-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border-left: 5px solid var(--accent-secondary);
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <div class="d-inline-block mb-3 px-4 py-2 rounded-pill bg-white shadow-sm" style="color: var(--accent-primary); font-weight: 600; font-size: 0.9rem;">
+                <i class="bi bi-rocket-takeoff me-2"></i> Projet SLAM
+            </div>
+            <h1>Campus HelpDesk</h1>
+            <p class="lead">
+                Une solution moderne et performante de gestion de tickets d'assistance dédiée aux établissements scolaires. Simplifiez la communication entre les étudiants et le support technique.
+            </p>
+            <div class="d-flex justify-content-center gap-4 mt-4">
+                <a href="public/auth/login.php" class="btn btn-primary-custom text-decoration-none">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Accéder à l'application
+                </a>
+                <a href="documentation.html" class="btn btn-outline-custom text-decoration-none">
+                    <i class="bi bi-journal-code me-2"></i> Voir la documentation technique
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3 Portails Section -->
+    <section class="container py-5 mt-4">
+        <h2 class="section-title">Une application, trois portails distincts</h2>
+        
+        <div class="row g-4">
+            <!-- Étudiant -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon bg-student">
+                        <i class="bi bi-mortarboard"></i>
+                    </div>
+                    <h3>Espace Étudiant</h3>
+                    <p>Une interface claire et intuitive pour permettre aux élèves de demander de l'aide rapidement.</p>
+                    <ul>
+                        <li>Création rapide de tickets d'incident.</li>
+                        <li>Suivi en temps réel de l'état de la demande.</li>
+                        <li>Messagerie intégrée pour dialoguer avec un technicien.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Technicien -->
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon bg-tech">
+                        <i class="bi bi-tools"></i>
+                    </div>
+                    <h3>Espace Technicien</h3>
+                    <p>Un tableau de bord optimisé pour traiter efficacement la file d'attente des demandes.</p>
+                    <ul>
+                        <li>Visualisation globale des tickets ouverts.</li>
+                        <li>Système d'auto-assignation d'un ticket.</li>
+                        <li>Changement dynamique du statut (En cours / Résolu).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Administrateur -->
+            <div class="col-lg-4 col-md-12">
+                <div class="feature-card">
+                    <div class="feature-icon bg-admin">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3>Espace Administrateur</h3>
+                    <p>Le centre de contrôle absolu pour superviser l'application et gérer les ressources.</p>
+                    <ul>
+                        <li>Gestion complète des utilisateurs (CRUD & Activation).</li>
+                        <li>Gestion des catégories de problèmes.</li>
+                        <li>Statistiques détaillées et graphiques (KPIs).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies utilisées -->
+    <section class="container py-5 text-center">
+        <h2 class="section-title mb-4">Stack Technique & Architecture</h2>
+        
+        <div class="d-flex flex-wrap justify-content-center mb-5">
+            <div class="tech-badge">
+                <i class="bi bi-filetype-php php-color"></i> PHP 8.1+ (Natif)
+            </div>
+            <div class="tech-badge">
+                <i class="bi bi-database mysql-color"></i> MySQL & PDO
+            </div>
+            <div class="tech-badge">
+                <i class="bi bi-bootstrap bs-color"></i> Bootstrap 5.3
+            </div>
+            <div class="tech-badge">
+                <i class="bi bi-shield-lock secure-color"></i> Sécurité Renforcée
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-start">
+                <div class="archi-box">
+                    <h4 class="mb-3 fw-bold"><i class="bi bi-diagram-3-fill me-2 text-primary"></i> Architecture logicielle solide</h4>
+                    <p class="text-muted">
+                        Le projet a été pensé de manière modulaire, en utilisant des concepts de séparation des préoccupations :
+                    </p>
+                    <ul class="text-muted mb-0">
+                        <li><strong>Repositories :</strong> Couche exclusive pour l'interaction avec la base de données (requêtes préparées PDO).</li>
+                        <li><strong>Services :</strong> Couche contenant la logique métier (validation, contrôles d'accès, processus métier complexes).</li>
+                        <li><strong>Front-Controller :</strong> Les pages PHP accèdent aux vues HTML tout en appelant sécuritairement les services.</li>
+                        <li><strong>Sécurité d'abord :</strong> Mots de passe hashés avec <code>bcrypt</code>, protection contre les injections SQL, contrôle d'accès en profondeur.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-muted">
+            <p class="mb-1 fw-medium">Campus HelpDesk - Projet Étudiant SLAM</p>
+            <small>Réalisé avec rigueur et passion. Un code propre pour une maintenance simplifiée.</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

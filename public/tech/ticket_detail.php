@@ -32,11 +32,11 @@ if (!$ticket) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     if ($action === 'assign') {
-        $result = $ticketService->assignToTech($ticketId, (int)$user['id'], $user['role']);
+        $result = $ticketService->assignToTech($ticketId, (int)$user['id'], (int)$user['id'], $user['role']);
         if ($result['success']) $success = $result['message']; else $error = $result['error'];
     } elseif ($action === 'status_update') {
         $newStatus = $_POST['status'] ?? '';
-        $result = $ticketService->updateStatus($ticketId, $newStatus, $user['role']);
+        $result = $ticketService->updateStatus($ticketId, $newStatus, (int)$user['id'], $user['role']);
         if ($result['success']) $success = $result['message']; else $error = $result['error'];
     } elseif ($action === 'add_message') {
         $message = $_POST['message'] ?? '';
@@ -157,6 +157,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i> Envoyer</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-white py-3">
+                        <?php $count = count($ticket['historique']); ?>
+                        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Historique du ticket : <?= $count ?></h5>
+                    </div>
+                    <div class="card-body p-4 bg-light">
+                        <?php if (empty($ticket['historique'])): ?>
+                            <p class="text-center text-muted mb-0">Aucun historique disponible.</p>
+                        <?php else: ?>
+                            <ul class="list-group list-group-flush">
+                                <?php foreach ($ticket['historique'] as $hist): ?>
+                                    <li class="list-group-item bg-transparent px-0 border-bottom border-light">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <small class="text-muted"><?= date('d/m/Y H:i', strtotime($hist['created_at'])) ?></small>
+                                            <small class="badge bg-secondary"><?= htmlspecialchars($hist['auteur_nom']) ?></small>
+                                        </div>
+                                        <p class="mb-1 mt-2">
+                                            <?php if ($hist['action'] === 'CREATION'): ?>
+                                                <i class="bi bi-star-fill text-warning"></i> <strong>Ticket créé</strong>
+                                            <?php elseif ($hist['action'] === 'STATUT'): ?>
+                                                <i class="bi bi-arrow-right-circle-fill text-primary"></i> <strong>Statut modifié :</strong> <span class="text-decoration-line-through text-muted"><?= htmlspecialchars($hist['old_value']) ?></span> &rarr; <span class="text-primary"><?= htmlspecialchars($hist['new_value']) ?></span>
+                                            <?php elseif ($hist['action'] === 'ASSIGNATION'): ?>
+                                                <i class="bi bi-person-lines-fill text-info"></i> <strong>Assignation modifiée :</strong> <span class="text-decoration-line-through text-muted"><?= htmlspecialchars($hist['old_value']) ?></span> &rarr; <span class="text-info"><?= $hist['new_value'] ? 'Technicien ID #' . htmlspecialchars($hist['new_value']) : 'Non assigné' ?></span>
+                                            <?php endif; ?>
+                                        </p>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

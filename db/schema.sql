@@ -43,3 +43,15 @@ CREATE TABLE messages_ticket (
   CONSTRAINT fk_msg_ticket FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
   CONSTRAINT fk_msg_user FOREIGN KEY (user_id) REFERENCES utilisateurs(id)
 ) ENGINE=InnoDB;
+
+CREATE TABLE historique_tickets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ticket_id INT NOT NULL,
+  user_id INT NOT NULL,
+  action ENUM('CREATION', 'STATUT', 'ASSIGNATION') NOT NULL,
+  old_value VARCHAR(255) NULL,
+  new_value VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_hist_ticket FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
+  CONSTRAINT fk_hist_user FOREIGN KEY (user_id) REFERENCES utilisateurs(id)
+) ENGINE=InnoDB;
