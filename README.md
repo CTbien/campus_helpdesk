@@ -125,9 +125,9 @@ Pour tester rapidement les différents espaces de l'application, les comptes sui
 
 | Rôle | Adresse Email | Mot de passe | Description de l'espace |
 | :--- | :--- | :--- | :--- |
-| **🎓 Étudiant** | `student@campus.local` | `Demo1234!` | Création de ticket, suivi de son tableau de bord et messagerie. |
-| **🛠️ Technicien** | `tech@campus.local` | `Demo1234!` | File d'attente globale, assignation, changement de statut et réponses. |
-| **👑 Administrateur** | `admin@campus.local` | `Demo1234!` | CRUD utilisateurs, gestion des catégories de tickets et graphiques analytiques (Chart.js). |
+| **🎓 Étudiant** | `student@campus.local` | `student` | Création de ticket, suivi de son tableau de bord et messagerie. |
+| **🛠️ Technicien** | `tech@campus.local` | `tech` | File d'attente globale, assignation, changement de statut et réponses. |
+| **👑 Administrateur** | `admin@campus.local` | `admin` | CRUD utilisateurs, gestion des catégories de tickets et graphiques analytiques (Chart.js). |
 
 ---
 
